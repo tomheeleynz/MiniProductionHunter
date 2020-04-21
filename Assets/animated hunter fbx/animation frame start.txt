@@ -1,0 +1,2 @@
+running animation starts from frame 25 to 70
+walking animation starts from 25 to 85
