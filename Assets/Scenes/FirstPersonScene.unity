@@ -217,6 +217,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88d81b4381b5d5e469066351dd94bbfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentX: 0
+  currentY: 0
+  cameraTransform: {fileID: 0}
 --- !u!1 &1187823086
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,6 +266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
+  fpCamera: {fileID: 844008795}
 --- !u!54 &1187823089
 Rigidbody:
   m_ObjectHideFlags: 0
