@@ -82,7 +82,7 @@ public class StartMenu : MonoBehaviour
 
     private void StartGame()
     {
-        SceneManager.LoadScene("TestTerrain");
+        SceneManager.LoadScene("MainLevel");
     }
 
     private void EndGame()
