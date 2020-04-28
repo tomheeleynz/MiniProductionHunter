@@ -10,6 +10,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
     [SerializeField] public float moveSpeed;
     [SerializeField] public GameObject fpCamera;
+    [SerializeField] public GameObject bow;
 
     // Vectors
     Vector2 Move;
@@ -36,7 +37,10 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         _controls.Gameplay.Enable();
     }
 
-
+    private void OnDisable()
+    {
+        _controls.Gameplay.Disable();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +55,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         fpCamera.GetComponent<FirstPersonCamera>().currentY += Rotate.x * 2.0f;
 
         transform.rotation = Quaternion.Euler(0, fpCamera.GetComponent<FirstPersonCamera>().currentY, 0);
+       
         Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed  * Move.y);
         rb.velocity = new Vector3(MoveDirection.x, rb.velocity.y, MoveDirection.z);
     }
