@@ -41,8 +41,12 @@ public class Deer_Vision_Cone : MonoBehaviour
                     //Debug.Log(hit.collider.name);
                     if (hit.collider.tag == "Player")
                     {
-                        DeerAI.currentState = Deer_AI.AIStates.Idle;
-                        DeerAI.player = target;
+                        if (DeerAI.PlayerChecked == false)
+                        {
+                            DeerAI.currentState = Deer_AI.AIStates.Running;
+                            DeerAI.player = target;
+                            DeerAI.PlayerChecked = true;
+                        }
                         //Debug.Log(GettingCurrentStat.currentState);
 
                         //Debug.Log("I see you!!");
