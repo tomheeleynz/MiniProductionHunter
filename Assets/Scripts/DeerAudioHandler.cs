@@ -53,7 +53,7 @@ public class DeerAudioHandler : MonoBehaviour
         {
             TimeElapsed += Time.deltaTime;
            // Debug.Log(TimeElapsed);
-            if (EnviromentalSource.volume < 1.0f && TimeElapsed >= QuietTime)
+            if (EnviromentalSource.volume < startVol && TimeElapsed >= QuietTime)
             {
                 EnviromentalSource.volume += startVol * Time.deltaTime / FadeInTime;
             }
