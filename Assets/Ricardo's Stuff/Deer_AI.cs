@@ -98,7 +98,7 @@ public class Deer_AI : MonoBehaviour
 
         if (currentState == AIStates.Idle)
         {
-            DeerSound.clip = DeerSounds[1];
+            //DeerSound.clip = DeerSounds[1];
             if (player)
             {
                 agent.SetDestination(RandomNavSphere(transform.position, Random.Range(1, 2.4f)));
@@ -125,7 +125,7 @@ public class Deer_AI : MonoBehaviour
         else if (currentState == AIStates.Roaming)
         {
             agent.speed = RoamingSpeed;
-            DeerSound.clip = DeerSounds[1];
+            //DeerSound.clip = DeerSounds[1];
 
             if (DoneReachingDestination())
             {
