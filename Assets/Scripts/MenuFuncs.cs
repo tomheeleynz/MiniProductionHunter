@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MenuFuncs : MonoBehaviour
 {
+   
     public float fadeTime = 0.0f;
     public GameObject fadePanel = null;
 
@@ -44,7 +45,7 @@ public class MenuFuncs : MonoBehaviour
         }
     }
 
-    void ExitGame()
+    public void ExitGame()
     {
         Application.Quit();
     }
