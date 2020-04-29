@@ -11,6 +11,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     [SerializeField] public float moveSpeed;
     [SerializeField] public GameObject fpCamera;
     [SerializeField] public GameObject bow;
+    [SerializeField] public GameObject arrow;
 
     // Vectors
     Vector2 Move;
@@ -30,6 +31,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         // Camera Rotation
         _controls.Gameplay.Rotate.performed += ctx => Rotate = ctx.ReadValue<Vector2>();
         _controls.Gameplay.Rotate.canceled += ctx => Rotate = Vector2.zero;
+
+        _controls.Gameplay.Fire.started += ctx => FireBow();
     }
 
     private void OnEnable()
@@ -58,6 +61,12 @@ public class FirstPersonPlayerMovement : MonoBehaviour
        
         Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed  * Move.y);
         rb.velocity = new Vector3(MoveDirection.x, rb.velocity.y, MoveDirection.z);
+    }
+
+    private void FireBow()
+    {
+        GameObject arrowObj = Instantiate(arrow, transform.forward * 10, Quaternion.identity) as GameObject;
+        arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
     }
 
 
