@@ -47,7 +47,8 @@ public class Deer_AI : MonoBehaviour
     List<Vector3> previousIdlePoints = new List<Vector3>();
 
 
-    bool test = false;
+    public bool PlayerChecked = false;
+
     Vector3 runTo = Vector3.zero;
 
 
@@ -107,10 +108,10 @@ public class Deer_AI : MonoBehaviour
             else
             {
                 actionTimer = Random.Range(7, 12);
-
+                PlayerChecked = false;
                 currentState = AIStates.Standing;
                 SwitchAnimationState(currentState);
-                test = false;
+                
 
                 previousIdlePoints.Add(transform.position);
                 if (previousIdlePoints.Count > 5)
@@ -200,13 +201,8 @@ public class Deer_AI : MonoBehaviour
                 else
                 {
 
-
-                    if (test == false)
-                    {
-                        runTo = transform.position + ((transform.position - player.position) * multiplier);
-                        distance = (transform.position - player.position).sqrMagnitude;
-                        test = true;
-                    }
+                    runTo = transform.position + ((transform.position - player.position) * multiplier);
+                    distance = (transform.position - player.position).sqrMagnitude;
 
                     NavMeshHit hit;
                     if (NavMesh.FindClosestEdge(transform.position, out hit, NavMesh.AllAreas))

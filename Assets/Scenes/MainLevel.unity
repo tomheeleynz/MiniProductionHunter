@@ -7588,17 +7588,17 @@ PrefabInstance:
     - target: {fileID: 3770630621975563978, guid: d149a3b5a31f8fe479b3c397acbd4253,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 697.937
+      value: 595.7
       objectReference: {fileID: 0}
     - target: {fileID: 3770630621975563978, guid: d149a3b5a31f8fe479b3c397acbd4253,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 175.4346
+      value: 168.07
       objectReference: {fileID: 0}
     - target: {fileID: 3770630621975563978, guid: d149a3b5a31f8fe479b3c397acbd4253,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 609.5286
+      value: 622.09
       objectReference: {fileID: 0}
     - target: {fileID: 3770630621975563978, guid: d149a3b5a31f8fe479b3c397acbd4253,
         type: 3}
@@ -7649,6 +7649,11 @@ PrefabInstance:
         type: 3}
       propertyPath: player
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3770630621975563979, guid: d149a3b5a31f8fe479b3c397acbd4253,
+        type: 3}
+      propertyPath: RunningSpeed
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 3770630621975563983, guid: d149a3b5a31f8fe479b3c397acbd4253,
         type: 3}
