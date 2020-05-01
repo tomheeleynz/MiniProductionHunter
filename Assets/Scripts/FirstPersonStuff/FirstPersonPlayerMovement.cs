@@ -66,9 +66,14 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     {
         Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed * Move.y);
         MoveDirection += transform.position;
-        float terrainSampleHeight = Terrain.activeTerrain.SampleHeight(transform.position) + 2.5f;
-        MoveDirection.y = terrainSampleHeight;
-        rb.MovePosition(MoveDirection );    
+        float terrainSampleHeight = Terrain.activeTerrain.SampleHeight(MoveDirection) + 2.5f;
+
+        if (terrainSampleHeight > 3.0f) //Not below water line
+        {
+            MoveDirection.y = terrainSampleHeight;
+            rb.MovePosition(MoveDirection);
+        }
+        
     }
     private void FireBow()
     {
