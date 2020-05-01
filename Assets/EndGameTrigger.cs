@@ -46,7 +46,8 @@ public class EndGameTrigger : MonoBehaviour
             }
         }
 
-        if (EndGameAfterTimer && ElapsedTime >= TimeOfGameInSeconds)
+        if (EndGameAfterTimer && ElapsedTime >= TimeOfGameInSeconds ||
+            DeerSkinCollected >= DeerSkinRequired)
         {
             SceneLoader.LoadScene("EndScene");
         }
