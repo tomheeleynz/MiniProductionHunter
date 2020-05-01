@@ -10,6 +10,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
     [SerializeField] public float moveSpeed;
     [SerializeField] public GameObject fpCamera;
+    [SerializeField] public GameObject bow;
+    [SerializeField] public GameObject arrow;
 
     // Vectors
     Vector2 Move;
@@ -29,6 +31,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         // Camera Rotation
         _controls.Gameplay.Rotate.performed += ctx => Rotate = ctx.ReadValue<Vector2>();
         _controls.Gameplay.Rotate.canceled += ctx => Rotate = Vector2.zero;
+
+        _controls.Gameplay.Fire.started += ctx => FireBow();
     }
 
     private void OnEnable()
@@ -36,7 +40,10 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         _controls.Gameplay.Enable();
     }
 
-
+    private void OnDisable()
+    {
+        _controls.Gameplay.Disable();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -51,8 +58,22 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         fpCamera.GetComponent<FirstPersonCamera>().currentY += Rotate.x * 2.0f;
 
         transform.rotation = Quaternion.Euler(0, fpCamera.GetComponent<FirstPersonCamera>().currentY, 0);
-        Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed  * Move.y);
-        rb.velocity = new Vector3(MoveDirection.x, rb.velocity.y, MoveDirection.z);
+        //Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed  * Move.y);
+        //rb.velocity = new Vector3(MoveDirection.x, rb.velocity.y, MoveDirection.z);
+
+    }
+    private void FixedUpdate()
+    {
+        Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed * Move.y);
+        MoveDirection += transform.position;
+        float terrainSampleHeight = Terrain.activeTerrain.SampleHeight(transform.position) + 2.5f;
+        MoveDirection.y = terrainSampleHeight;
+        rb.MovePosition(MoveDirection );    
+    }
+    private void FireBow()
+    {
+        GameObject arrowObj = Instantiate(arrow, transform.position + transform.forward * 10, Quaternion.identity) as GameObject;
+        arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
     }
 
 
