@@ -58,14 +58,20 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         fpCamera.GetComponent<FirstPersonCamera>().currentY += Rotate.x * 2.0f;
 
         transform.rotation = Quaternion.Euler(0, fpCamera.GetComponent<FirstPersonCamera>().currentY, 0);
-       
-        Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed  * Move.y);
-        rb.velocity = new Vector3(MoveDirection.x, rb.velocity.y, MoveDirection.z);
-    }
+        //Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed  * Move.y);
+        //rb.velocity = new Vector3(MoveDirection.x, rb.velocity.y, MoveDirection.z);
 
+    }
+    private void FixedUpdate()
+    {
+        Vector3 MoveToPos = transform.position + new Vector3(moveSpeed * Move.x, 0, moveSpeed * Move.y);
+        float terrainSampleHeight = Terrain.activeTerrain.SampleHeight(transform.position) + 2.5f;
+        MoveToPos.y = terrainSampleHeight;
+        rb.MovePosition(MoveToPos);    
+    }
     private void FireBow()
     {
-        GameObject arrowObj = Instantiate(arrow, transform.forward * 10, Quaternion.identity) as GameObject;
+        GameObject arrowObj = Instantiate(arrow, transform.position + transform.forward * 10, Quaternion.identity) as GameObject;
         arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
     }
 
