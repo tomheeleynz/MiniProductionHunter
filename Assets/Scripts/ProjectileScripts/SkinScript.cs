@@ -6,8 +6,8 @@ public class SkinScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            other.GetComponent<CharacterShooting>().numSkins++;
-            other.gameObject.GetComponent<CharacterShooting>().skinCounter.GetComponent<TMPro.TextMeshProUGUI>().text = other.GetComponent<CharacterShooting>().numSkins.ToString();
+            other.GetComponent<Inventory>().numSkins++;
+            //other.gameObject.GetComponent<CharacterShooting>().skinCounter.GetComponent<TMPro.TextMeshProUGUI>().text = other.GetComponent<CharacterShooting>().numSkins.ToString();
             Destroy(gameObject);
         }
     }
