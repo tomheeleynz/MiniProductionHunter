@@ -183,7 +183,7 @@ public class Deer_AI : MonoBehaviour
         else if (currentState == AIStates.Running)
         {
             agent.speed = RunningSpeed;
-            DeerSound.clip = DeerSounds[0];
+            //DeerSound.clip = DeerSounds[0];
 
             if (player)
             {
