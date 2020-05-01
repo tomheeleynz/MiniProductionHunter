@@ -64,10 +64,11 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        Vector3 MoveToPos = transform.position + new Vector3(moveSpeed * Move.x, 0, moveSpeed * Move.y);
+        Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed * Move.y);
+        MoveDirection += transform.position;
         float terrainSampleHeight = Terrain.activeTerrain.SampleHeight(transform.position) + 2.5f;
-        MoveToPos.y = terrainSampleHeight;
-        rb.MovePosition(MoveToPos);    
+        MoveDirection.y = terrainSampleHeight;
+        rb.MovePosition(MoveDirection );    
     }
     private void FireBow()
     {
