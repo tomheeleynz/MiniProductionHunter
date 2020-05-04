@@ -44,11 +44,6 @@ public class ProjectileCollision : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if (Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f) && !stopped)
-        {
-            Stop();
-        }*/
-
         if (stopped)
         {
             Timer();
@@ -61,9 +56,11 @@ public class ProjectileCollision : MonoBehaviour
     {
         if (!stopped)
         {
-            if (other.gameObject.tag == "Stag")
-            {
+            if (other.gameObject.tag == "Stag") {
                 Debug.Log("Stag Hit");
+            }
+            else if (other.gameObject.tag == "Ground") {
+                Debug.Log("Ground Hit");
             }
             Stop();
         }
