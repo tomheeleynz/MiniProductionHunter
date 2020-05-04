@@ -10,6 +10,7 @@ public class ProjectileCollision : MonoBehaviour
     public GameObject shootTrail;
     public GameObject groundTrail;
     public GameObject bloodTrail;
+    [SerializeField] public float timeLeft;
 
     private void Stop()
     {
@@ -48,6 +49,11 @@ public class ProjectileCollision : MonoBehaviour
             Stop();
         }*/
 
+        if (stopped)
+        {
+            Timer();
+        }
+
         rb.transform.rotation = Quaternion.LookRotation(rb.velocity, transform.up);
     }
 
@@ -55,62 +61,21 @@ public class ProjectileCollision : MonoBehaviour
     {
         if (!stopped)
         {
+            if (other.gameObject.tag == "Stag")
+            {
+                Debug.Log("Stag Hit");
+            }
             Stop();
-
-            // Check if hit player
-            if (other.gameObject.GetComponent<CharacterShooting>() != null)
-            {
-                // Kill player here
-                Debug.Log("Hit a player");
-                bloodTrail.SetActive(true);
-                Destroy(gameObject,2);
-
-                other.gameObject.GetComponent<CharacterShooting>().CurrentHealthPoints -= 1;
-
-                if (other.gameObject.GetComponent<CharacterShooting>().CurrentHealthPoints <= 0 )
-                {
-                    for (int i = 0; i < other.gameObject.GetComponent<CharacterShooting>().numSkins; i++)
-                    {
-                        Instantiate(skinDrop, other.gameObject.transform.position, transform.rotation);
-                    }
-                    other.gameObject.GetComponent<CharacterShooting>().numSkins = 0;
-                    other.gameObject.GetComponent<Death>().isDead = true;
-                    Destroy(gameObject,2);
-                }
-            }
-            else if (other.gameObject.GetComponent<Deer_AI>() != null)
-            {
-                other.gameObject.GetComponent<Deer_AI>().deerHp--;
-                Debug.Log("Hit Stag");
-                bloodTrail.SetActive(true);
-                Destroy(gameObject,2);
-
-                if (other.gameObject.GetComponent<Deer_AI>().deerHp <= 0)
-                {
-                    Debug.Log("YOU WIN");
-                    GameObject skin = (GameObject)Instantiate(skinDrop, other.gameObject.transform.position, transform.rotation);
-                    Destroy(other.gameObject);
-                }
-            }
-            else if (other.gameObject.GetComponent<Deer_Vision_Cone>() != null)
-            {
-                other.gameObject.GetComponent<Deer_Vision_Cone>().Deer.GetComponent<Deer_AI>().deerHp -= 3;
-                Debug.Log("Headshot Stag");
-                bloodTrail.SetActive(true);
-                Destroy(gameObject,2);
-
-                if (other.gameObject.GetComponent<Deer_Vision_Cone>().Deer.GetComponent<Deer_AI>().deerHp <= 0)
-                {
-                    Debug.Log("YOU WIN");
-                    GameObject skin = (GameObject)Instantiate(skinDrop, other.gameObject.transform.position, transform.rotation);
-                    Destroy(other.gameObject.GetComponent<Deer_Vision_Cone>().Deer.gameObject);
-                }
-            }
         }
-        else if (canCollect && other.gameObject.tag == "Player")
+    }
+
+    void Timer()
+    {
+        timeLeft -= Time.deltaTime;
+
+        if (timeLeft <= 0)
         {
-            other.gameObject.GetComponent<CharacterShooting>().ammo++;
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 }
