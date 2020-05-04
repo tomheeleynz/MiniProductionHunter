@@ -47,6 +47,8 @@ public class ProjectileCollision : MonoBehaviour
         {
             Stop();
         }*/
+
+        rb.transform.rotation = Quaternion.LookRotation(rb.velocity, transform.up);
     }
 
     private void OnCollisionEnter(Collision other)
