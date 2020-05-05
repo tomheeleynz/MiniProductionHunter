@@ -57,7 +57,7 @@ public class ProjectileCollision : MonoBehaviour
         if (!stopped)
         {
             if (other.gameObject.tag == "Stag") {
-                Debug.Log("Stag Hit");
+                Destroy(other.gameObject);
             }
             else if (other.gameObject.tag == "Ground") {
                 Debug.Log("Ground Hit");
