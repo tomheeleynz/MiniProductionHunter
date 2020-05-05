@@ -1155,6 +1155,11 @@ PrefabInstance:
       propertyPath: m_FieldOfView
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 4176978117909021234, guid: c93c7ef90b76f2c44acd0bdde33ff3cb,
+        type: 3}
+      propertyPath: firingPosition
+      value: 
+      objectReference: {fileID: 1987818225}
     - target: {fileID: 4176978117909021235, guid: c93c7ef90b76f2c44acd0bdde33ff3cb,
         type: 3}
       propertyPath: m_Constraints
@@ -1696,6 +1701,36 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 1
   m_Emitting: 1
+--- !u!1 &1987818224
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1987818225}
+  m_Layer: 0
+  m_Name: FiringPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1987818225
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987818224}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.049, y: 0.94000053, z: 0.959}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1050599932}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2093256327
 PrefabInstance:
   m_ObjectHideFlags: 0

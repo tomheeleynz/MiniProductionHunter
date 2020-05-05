@@ -110,7 +110,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     {
         bow.GetComponent<Animator>().enabled = true;
         GameObject shootingArrow = Instantiate(arrow, firingPosition.position, Quaternion.identity) as GameObject;
-        shootingArrow.GetComponent<Rigidbody>().AddForce(transform.forward * 100);
+        shootingArrow.GetComponent<Rigidbody>().AddForce(transform.forward * 20);
     }
 
 }
