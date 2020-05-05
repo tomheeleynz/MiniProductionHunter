@@ -12,7 +12,7 @@ public class EndGameTrigger : MonoBehaviour
 
     public float TimeOfGameInSeconds = 180;
     private float ElapsedTime = 0.0f;
-
+    private float ElapsedTimeMag = 0.0f;
     public int DeerSkinRequired = 3;
     private int DeerSkinCollected = 0;
 
@@ -21,6 +21,8 @@ public class EndGameTrigger : MonoBehaviour
     public float TimeSpeedUp = 1.0f;
 
     private MenuFuncs SceneLoader;
+
+    public GameObject TimeDial;
     // Start is called before the first frame update
     void Start()
     {
@@ -51,6 +53,14 @@ public class EndGameTrigger : MonoBehaviour
         {
             SceneLoader.LoadScene("EndScene");
         }
+
+
+        ElapsedTimeMag = ElapsedTime / TimeOfGameInSeconds;
+        RenderSettings.skybox.SetFloat("_Exposure", 0.13f + (0.37f * ElapsedTimeMag));
+        RenderSettings.sun.intensity = 0.1f + (0.2f * ElapsedTimeMag);
+
+
+        TimeDial.transform.rotation = Quaternion.Euler(0, 0, 85.0f - (75.0f * ElapsedTimeMag));
     }
 
     void OnGUI()
