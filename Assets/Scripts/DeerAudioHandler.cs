@@ -113,6 +113,7 @@ public class DeerAudioHandler : MonoBehaviour
 
     private void OnDestroy()
     {
+        if(EnviromentalSource!=null)
         EnviromentalSource.volume = startVol;
     }
 
