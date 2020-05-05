@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Animations;
 
 
 public class FirstPersonPlayerMovement : MonoBehaviour
@@ -12,6 +13,12 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     [SerializeField] public GameObject fpCamera;
     [SerializeField] public GameObject bow;
     [SerializeField] public GameObject arrow;
+    [SerializeField] public float m_FieldOfView;
+    [SerializeField] public Transform firingPosition;
+    private Camera cam;
+    private float currentValue;
+    private float lastValue;
+    
 
     // Vectors
     Vector2 Move;
@@ -19,6 +26,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
     // Rigid Body For Movement
     private Rigidbody rb;
+
+    private float bowStuff;
 
     private void Awake()
     {
@@ -32,7 +41,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         _controls.Gameplay.Rotate.performed += ctx => Rotate = ctx.ReadValue<Vector2>();
         _controls.Gameplay.Rotate.canceled += ctx => Rotate = Vector2.zero;
 
-        _controls.Gameplay.Fire.started += ctx => FireBow();
+        _controls.Gameplay.Fire.performed += ctx => DrawBow(ctx.ReadValue<float>());
+        _controls.Gameplay.Fire.canceled += ctx => FireBow();
     }
 
     private void OnEnable()
@@ -60,8 +70,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, fpCamera.GetComponent<FirstPersonCamera>().currentY, 0);
         //Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed  * Move.y);
         //rb.velocity = new Vector3(MoveDirection.x, rb.velocity.y, MoveDirection.z);
-
     }
+
     private void FixedUpdate()
     {
         Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed * Move.y);
@@ -75,11 +85,32 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         }
         
     }
-    private void FireBow()
+
+    private void DrawBow(float currentValue)
     {
-        GameObject arrowObj = Instantiate(arrow, transform.position + transform.forward * 10, Quaternion.identity) as GameObject;
-        arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
+        //bow.GetComponent<Animator>().enabled = true;
+        //GameObject arrowObj = Instantiate(arrow, transform.position + transform.forward * 10, Quaternion.identity) as GameObject;
+        //arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
+
+
+        float deltaValue = currentValue - lastValue;
+
+        if (deltaValue > 0.1)
+        {
+            bow.GetComponent<Animator>().enabled = true;
+        }
+        else {
+            bow.GetComponent<Animator>().enabled = false;
+        }
+
+        lastValue = currentValue;
     }
 
+    private void FireBow()
+    {
+        bow.GetComponent<Animator>().enabled = true;
+        GameObject shootingArrow = Instantiate(arrow, firingPosition.position, Quaternion.identity) as GameObject;
+        shootingArrow.GetComponent<Rigidbody>().AddForce(transform.forward * 100);
+    }
 
 }
