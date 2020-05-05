@@ -45,6 +45,7 @@ public class Deer_Vision_Cone : MonoBehaviour
                         {
                             DeerAI.currentState = Deer_AI.AIStates.Running;
                             DeerAI.player = target;
+                            
                             DeerAI.PlayerChecked = true;
                         }
                         //Debug.Log(GettingCurrentStat.currentState);

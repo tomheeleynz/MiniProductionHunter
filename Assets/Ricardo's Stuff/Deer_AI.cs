@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Deer_AI : MonoBehaviour
 {
     public int deerHp = 3;
-    public enum AIStates { Idle, Roaming, Standing, Running, Alert}
+    public enum AIStates { Idle, Roaming, Standing, Running, Alert }
     public AIStates currentState = AIStates.Idle;
 
     public int RadiusOfAlert = 15;
@@ -27,14 +27,14 @@ public class Deer_AI : MonoBehaviour
     NavMeshPath navMeshPath;
 
 
-    public AudioClip[] DeerSounds;
-    AudioSource DeerSound;
+    //public AudioClip[] DeerSounds;
+    //AudioSource DeerSound;
 
     bool switchActions = false;
     float actionTimer = 0;
     float AlertTimer = 0;
-    
-    float howfardeerhastorun = 20;
+
+    float howfardeerhastorun = 20f;
     float multiplier = 1;
     bool reverseFlee = false;
 
@@ -60,7 +60,7 @@ public class Deer_AI : MonoBehaviour
         agent.autoBraking = true;
 
         animator = gameObject.GetComponent<Animator>();
-        DeerSound = gameObject.GetComponent<AudioSource>();
+        //DeerSound = gameObject.GetComponent<AudioSource>();
 
         c = gameObject.AddComponent<SphereCollider>();
         c.isTrigger = true;
@@ -70,7 +70,7 @@ public class Deer_AI : MonoBehaviour
 
         currentState = AIStates.Idle;
         actionTimer = Random.Range(0.1f, 2.0f);
-        SwitchAnimationState(currentState);
+        //SwitchAnimationState(currentState);
     }
 
     // Update is called once per frame
@@ -86,10 +86,10 @@ public class Deer_AI : MonoBehaviour
             checkCounter -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             StartCoroutine(Fade());
-
+
         }
         //Debug.Log(currentState);
         if (actionTimer > 0)
@@ -116,7 +116,7 @@ public class Deer_AI : MonoBehaviour
                 PlayerChecked = false;
                 currentState = AIStates.Standing;
                 SwitchAnimationState(currentState);
-                
+
 
                 previousIdlePoints.Add(transform.position);
                 if (previousIdlePoints.Count > 5)
@@ -173,7 +173,7 @@ public class Deer_AI : MonoBehaviour
         else if (currentState == AIStates.Alert)
         {
 
-            DeerSound.clip = DeerSounds[0];
+            //DeerSound.clip = DeerSounds[0];
 
             AlertLookAround(true);
             switchActions = false;
@@ -205,15 +205,16 @@ public class Deer_AI : MonoBehaviour
                 }
                 else
                 {
-
-                    runTo = transform.position + ((transform.position - player.position) * multiplier);
+                    Vector3 runTo = transform.position + ((transform.position - player.position) * multiplier);
                     distance = (transform.position - player.position).sqrMagnitude;
 
+                    //Find the closest NavMesh edge
                     NavMeshHit hit;
                     if (NavMesh.FindClosestEdge(transform.position, out hit, NavMesh.AllAreas))
                     {
                         closestEdge = hit.position;
                         distanceToEdge = hit.distance;
+                        //Debug.DrawLine(transform.position, closestEdge, Color.red);
                     }
 
                     if (distanceToEdge < 1f)
@@ -228,9 +229,7 @@ public class Deer_AI : MonoBehaviour
                         }
                         else
                         {
-
                             timeStuck += Time.deltaTime;
-
                         }
                     }
 
@@ -241,44 +240,34 @@ public class Deer_AI : MonoBehaviour
                     else
                     {
                         player = null;
-                    }
-
-                    agent.CalculatePath(agent.destination, navMeshPath);
-
-                    if (navMeshPath.status != NavMeshPathStatus.PathComplete)
-                    {
-                        agent.destination = RandomNavSphere(transform.position, Random.Range(60, 250));
-                        Debug.Log("Can't go there");
-                    }
-                    else
-                    {
-                        Debug.Log("Path Clear");
+                        PlayerChecked = false;
                     }
                 }
 
+                //Temporarily switch to Idle if the Agent stopped
                 if (agent.velocity.sqrMagnitude < 0.1f * 0.1f)
                 {
-                    //SwitchAnimationState(AIState.Idle);
+                    SwitchAnimationState(AIStates.Idle);
                 }
                 else
                 {
-                    //SwitchAnimationState(AIState.Running);
+                    SwitchAnimationState(AIStates.Running);
                 }
             }
             else
             {
+                //Check if we've reached the destination then stop running
                 if (DoneReachingDestination())
                 {
                     actionTimer = Random.Range(1.4f, 3.4f);
                     currentState = AIStates.Standing;
-                    //SwitchAnimationState(AIState.Idle);
+                    //SwitchAnimationState(AIStates.Idle);
                 }
             }
-        }
 
             switchActions = false;
+        }
 
-        
     }
 
     public void findClosestPlayer()
@@ -303,11 +292,11 @@ public class Deer_AI : MonoBehaviour
 
     bool DoneReachingDestination()
     {
-        if(!agent.pathPending)
+        if (!agent.pathPending)
         {
-            if(agent.remainingDistance <= agent.stoppingDistance)
+            if (agent.remainingDistance <= agent.stoppingDistance)
             {
-                if(!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
                     return true;
                 }
@@ -320,9 +309,9 @@ public class Deer_AI : MonoBehaviour
     void SwitchAnimationState(AIStates state)
     {
         //Debug.Log(animator);
-        if(animator)
+        if (animator)
         {
-            animator.SetBool("isStanding", state == AIStates.Standing);
+            //animator.SetBool("isStanding", state == AIStates.Standing);
             //animator.SetBool("isRunning", state == AIStates.Running);
             //animator.SetBool("isRoaming", state == AIStates.Roaming);
         }
@@ -354,39 +343,39 @@ public class Deer_AI : MonoBehaviour
         alreadylooking = triggered;
     }
 
-    IEnumerator Fade()
-    {
-        for (float ft = 1f; ft >= 0; ft -= 0.1f)
-        {
-            Color c = GetComponent<Light>().color;
-            c.g = ft;
-            c.b = ft;
-            GetComponent<Light>().color = c;
-
-            if (ft < 0.1f)
-            {
-                StartCoroutine(FadeOut());
-            }
-            yield return new WaitForSeconds(.02f);
-        }
+    IEnumerator Fade()
+    {
+        for (float ft = 1f; ft >= 0; ft -= 0.1f)
+        {
+            Color c = GetComponent<Light>().color;
+            c.g = ft;
+            c.b = ft;
+            GetComponent<Light>().color = c;
+
+            if (ft < 0.1f)
+            {
+                StartCoroutine(FadeOut());
+            }
+            yield return new WaitForSeconds(.02f);
+        }
     }
 
-    IEnumerator FadeOut()
-    {
-        for (float ft = 0f; ft <= 1; ft += 0.1f)
-        {
-            Color c = GetComponent<Light>().color;
-            c.g = ft;
-            c.b = ft;
-            GetComponent<Light>().color = c;
-
-            if (ft > 0.9f)
-            {
-                yield break;
-            }
-            yield return new WaitForSeconds(.02f);
-        }
-
+    IEnumerator FadeOut()
+    {
+        for (float ft = 0f; ft <= 1; ft += 0.1f)
+        {
+            Color c = GetComponent<Light>().color;
+            c.g = ft;
+            c.b = ft;
+            GetComponent<Light>().color = c;
+
+            if (ft > 0.9f)
+            {
+                yield break;
+            }
+            yield return new WaitForSeconds(.02f);
+        }
+
     }
     void OnTriggerEnter(Collider other)
     {
@@ -397,7 +386,7 @@ public class Deer_AI : MonoBehaviour
 
             actionTimer = Random.Range(0.24f, 0.8f);
             currentState = AIStates.Idle;
-            SwitchAnimationState(currentState);
+            //SwitchAnimationState(currentState);
         }
         else*/
         if (other.CompareTag("Arrow"))
@@ -408,12 +397,12 @@ public class Deer_AI : MonoBehaviour
 
             actionTimer = Random.Range(0.24f, 0.8f);
             currentState = AIStates.Idle;
-            SwitchAnimationState(currentState);
-
+            SwitchAnimationState(currentState);
+
             StartCoroutine(Fade());
             if (deerHp <= 0)
             {
-                DeerSound.clip = DeerSounds[3];
+                //DeerSound.clip = DeerSounds[3];
                 StartCoroutine(Countdown(2));
                 Destroy(gameObject);
             }
