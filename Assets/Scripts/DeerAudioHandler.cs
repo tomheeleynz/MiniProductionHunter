@@ -31,6 +31,7 @@ public class DeerAudioHandler : MonoBehaviour
     {
         thisSource = this.GetComponent<AudioSource>();
         thisAI = this.GetComponent<Deer_AI>();
+        EnviromentalSource = GameObject.Find("EnviromentalSound").GetComponent<AudioSource>();
         startVol = EnviromentalSource.volume;
     }
 
