@@ -56,8 +56,8 @@ public class EndGameTrigger : MonoBehaviour
 
 
         ElapsedTimeMag = ElapsedTime / TimeOfGameInSeconds;
-        RenderSettings.skybox.SetFloat("_Exposure", 0.13f + (0.37f * ElapsedTimeMag));
-        RenderSettings.sun.intensity = 0.1f + (0.2f * ElapsedTimeMag);
+        RenderSettings.skybox.SetFloat("_Exposure", 0.15f + (0.37f * ElapsedTimeMag));
+        RenderSettings.sun.intensity = 0.2f + (0.2f * ElapsedTimeMag);
 
 
         TimeDial.transform.rotation = Quaternion.Euler(0, 0, 85.0f - (75.0f * ElapsedTimeMag));
