@@ -15,13 +15,14 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     [SerializeField] public GameObject arrow;
     [SerializeField] public float m_FieldOfView;
     [SerializeField] public Transform firingPosition;
+    [HideInInspector]
     private Camera cam;
     private float currentValue;
     private float lastValue;
-    
+
 
     // Vectors
-    Vector2 Move;
+    [HideInInspector] public Vector2 Move;
     Vector3 Rotate;
 
     // Rigid Body For Movement

@@ -6,7 +6,7 @@ public class Deer_Vision_Cone : MonoBehaviour
 {
     public Transform target;
     public Transform Deer;
-    public float DeerMaxVision = 20f;
+    
 
     Deer_AI DeerAI;
 
@@ -30,12 +30,12 @@ public class Deer_Vision_Cone : MonoBehaviour
         {
 
             float dist = Vector3.Distance(target.position, transform.position);
-            if (dist < DeerMaxVision)
+            if (dist < DeerAI.DeerMaxVision)
             {
                 //Debug.Log("In angle!");
                 RaycastHit hit;
 
-                if (Physics.Raycast(transform.position, (target.position - transform.position), out hit, DeerMaxVision))
+                if (Physics.Raycast(transform.position, (target.position - transform.position), out hit, DeerAI.DeerMaxVision))
                 {
                     Debug.DrawRay(transform.position, (target.position - transform.position), Color.green, 8);
                     //Debug.Log(hit.collider.name);
