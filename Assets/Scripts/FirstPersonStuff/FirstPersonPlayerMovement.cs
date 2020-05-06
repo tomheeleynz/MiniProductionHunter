@@ -91,16 +91,22 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         //bow.GetComponent<Animator>().enabled = true;
         //GameObject arrowObj = Instantiate(arrow, transform.position + transform.forward * 10, Quaternion.identity) as GameObject;
         //arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
-
+        AudioSource DrawSound = bow.GetComponent<AudioSource>();
 
         float deltaValue = currentValue - lastValue;
 
         if (deltaValue > 0.1)
         {
             bow.GetComponent<Animator>().enabled = true;
+            if(!DrawSound.isPlaying)
+            {
+                DrawSound.Play();
+            }
         }
-        else {
+        else 
+        {
             bow.GetComponent<Animator>().enabled = false;
+            DrawSound.Stop();
         }
 
         lastValue = currentValue;
