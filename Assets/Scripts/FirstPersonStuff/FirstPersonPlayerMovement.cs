@@ -18,7 +18,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     private Camera cam;
     private float currentValue;
     private float lastValue;
-    
+    private float bowForce = 40;
+    private float cameraAngle;
 
     // Vectors
     Vector2 Move;
@@ -64,6 +65,10 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float cameraAngle = fpCamera.GetComponent<FirstPersonCamera>().transform.rotation.eulerAngles.x;
+
+
+
         fpCamera.GetComponent<FirstPersonCamera>().currentX -= Rotate.y * 2.0f;
         fpCamera.GetComponent<FirstPersonCamera>().currentY += Rotate.x * 2.0f;
 
@@ -95,8 +100,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
         float deltaValue = currentValue - lastValue;
 
-        if (deltaValue > 0.1)
-        {
+        if (deltaValue > 0.1) {
             bow.GetComponent<Animator>().enabled = true;
         }
         else {
@@ -110,7 +114,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     {
         bow.GetComponent<Animator>().enabled = true;
         GameObject shootingArrow = Instantiate(arrow, firingPosition.position, Quaternion.identity) as GameObject;
-        shootingArrow.GetComponent<Rigidbody>().AddForce(transform.forward * 20);
+        shootingArrow.GetComponent<Rigidbody>().AddForce((transform.forward/Mathf.Cos(Mathf.Deg2Rad * cameraAngle)) * bowForce);
     }
 
 }
