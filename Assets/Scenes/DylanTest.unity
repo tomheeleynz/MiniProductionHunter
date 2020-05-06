@@ -289,6 +289,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Deer_anim_3
       objectReference: {fileID: 0}
+    - target: {fileID: 5526801843948638787, guid: f44e85f4675ce9c498e8c36c18f9df6f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 39f35e6115e8fda47a934f54e7c1fb46, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f44e85f4675ce9c498e8c36c18f9df6f, type: 3}
 --- !u!1 &705507993
