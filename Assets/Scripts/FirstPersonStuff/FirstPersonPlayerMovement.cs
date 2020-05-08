@@ -15,10 +15,14 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     [SerializeField] public GameObject arrow;
     [SerializeField] public float m_FieldOfView;
     [SerializeField] public Transform firingPosition;
+    [SerializeField] public GameObject crossHair;
+
     private Camera cam;
     private float currentValue;
     private float lastValue;
-    
+    private float bowForce = 40;
+    private float cameraAngle;
+    private float lerpTimer;
 
     // Vectors
     Vector2 Move;
@@ -64,12 +68,15 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        cameraAngle = fpCamera.GetComponent<FirstPersonCamera>().transform.rotation.eulerAngles.x;
+
         fpCamera.GetComponent<FirstPersonCamera>().currentX -= Rotate.y * 2.0f;
         fpCamera.GetComponent<FirstPersonCamera>().currentY += Rotate.x * 2.0f;
 
         transform.rotation = Quaternion.Euler(0, fpCamera.GetComponent<FirstPersonCamera>().currentY, 0);
-        //Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed  * Move.y);
-        //rb.velocity = new Vector3(MoveDirection.x, rb.velocity.y, MoveDirection.z);
+
+        fpCamera.GetComponent<Camera>().fieldOfView = m_FieldOfView;
+
     }
 
     private void FixedUpdate()
@@ -92,11 +99,13 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         //GameObject arrowObj = Instantiate(arrow, transform.position + transform.forward * 10, Quaternion.identity) as GameObject;
         //arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
 
+        m_FieldOfView = 50;
 
         float deltaValue = currentValue - lastValue;
 
-        if (deltaValue > 0.1)
-        {
+        crossHair.SetActive(true);
+
+        if (deltaValue > 0.1) {
             bow.GetComponent<Animator>().enabled = true;
         }
         else {
@@ -108,9 +117,11 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
     private void FireBow()
     {
+        m_FieldOfView = 60;
+        crossHair.SetActive(false);
         bow.GetComponent<Animator>().enabled = true;
         GameObject shootingArrow = Instantiate(arrow, firingPosition.position, Quaternion.identity) as GameObject;
-        shootingArrow.GetComponent<Rigidbody>().AddForce(transform.forward * 20);
+        shootingArrow.GetComponent<Rigidbody>().AddForce((transform.forward/Mathf.Cos(Mathf.Deg2Rad * cameraAngle)) * bowForce);
     }
 
 }
