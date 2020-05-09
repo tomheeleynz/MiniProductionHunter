@@ -46,7 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   Deer: {fileID: 3770630621975563978}
-  DeerMaxVision: 10
 --- !u!65 &3277810891397076591
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -122,6 +121,7 @@ MonoBehaviour:
   player: {fileID: 0}
   VisionConePlayer: {fileID: 0}
   alreadylooking: 0
+  DeerMaxVision: 10
   switchActions: 0
   actionTimer: 0
   PlayerChecked: 0
@@ -193,7 +193,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   Deer: {fileID: 3770630621975563978}
-  DeerMaxVision: 20
 --- !u!82 &4994303530814469094
 AudioSource:
   m_ObjectHideFlags: 0
@@ -440,7 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5db4fd322d88fa645a23da24f7d54472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Deer: {fileID: 0}
+  Deer: {fileID: 3770630621975563978}
 --- !u!1001 &4623791181328300512
 PrefabInstance:
   m_ObjectHideFlags: 0

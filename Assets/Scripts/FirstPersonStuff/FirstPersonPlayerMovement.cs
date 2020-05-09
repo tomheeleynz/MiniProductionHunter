@@ -24,9 +24,9 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     private float cameraAngle;
     private float lerpTimer;
 
-
     // Vectors
-    [HideInInspector] public Vector2 Move;
+    [HideInInspector]
+    public Vector2 Move;
     Vector3 Rotate;
 
     // Rigid Body For Movement
@@ -109,7 +109,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
         if (deltaValue > 0.1) {
             bow.GetComponent<Animator>().enabled = true;
-            if(!DrawSound.isPlaying)
+
+            if (!DrawSound.isPlaying)
             {
                 DrawSound.Play();
             }

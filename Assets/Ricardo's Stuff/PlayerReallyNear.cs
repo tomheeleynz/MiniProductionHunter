@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerReallyNear : MonoBehaviour
 {
-
     Deer_AI DeerAI;
     public Transform Deer;
 
@@ -15,13 +14,10 @@ public class PlayerReallyNear : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
         if(other.gameObject.tag == "Player")
         {
-
             DeerAI.player = other.transform;
             DeerAI.currentState = Deer_AI.AIStates.Running;
-
         }
 
     }
