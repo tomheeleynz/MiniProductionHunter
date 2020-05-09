@@ -25,7 +25,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     private float lerpTimer;
 
     // Vectors
-    Vector2 Move;
+    [HideInInspector]
+    public Vector2 Move;
     Vector3 Rotate;
 
     // Rigid Body For Movement
@@ -98,6 +99,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         //bow.GetComponent<Animator>().enabled = true;
         //GameObject arrowObj = Instantiate(arrow, transform.position + transform.forward * 10, Quaternion.identity) as GameObject;
         //arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
+        AudioSource DrawSound = bow.GetComponent<AudioSource>();
 
         m_FieldOfView = 50;
 
@@ -107,9 +109,16 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
         if (deltaValue > 0.1) {
             bow.GetComponent<Animator>().enabled = true;
+
+            if (!DrawSound.isPlaying)
+            {
+                DrawSound.Play();
+            }
         }
-        else {
+        else 
+        {
             bow.GetComponent<Animator>().enabled = false;
+            DrawSound.Stop();
         }
 
         lastValue = currentValue;
