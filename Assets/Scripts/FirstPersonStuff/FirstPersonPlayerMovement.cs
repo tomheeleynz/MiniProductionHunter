@@ -69,15 +69,17 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        cameraAngle = fpCamera.GetComponent<FirstPersonCamera>().transform.rotation.eulerAngles.x;
+        cameraAngle = fpCamera.GetComponent<FirstPersonCamera>().currentX;
 
         fpCamera.GetComponent<FirstPersonCamera>().currentX -= Rotate.y * 2.0f;
         fpCamera.GetComponent<FirstPersonCamera>().currentY += Rotate.x * 2.0f;
 
         transform.rotation = Quaternion.Euler(0, fpCamera.GetComponent<FirstPersonCamera>().currentY, 0);
-
         fpCamera.GetComponent<Camera>().fieldOfView = m_FieldOfView;
 
+        // Set Bow Rotation
+        Vector3 bowAngle = bow.transform.rotation.eulerAngles;
+        bow.transform.rotation = Quaternion.Euler(fpCamera.GetComponent<FirstPersonCamera>().currentX, bowAngle.y, bowAngle.z);
     }
 
     private void FixedUpdate()

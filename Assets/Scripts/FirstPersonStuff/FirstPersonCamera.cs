@@ -21,7 +21,8 @@ public class FirstPersonCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentX = Mathf.Clamp(currentX, 0.0f, 80.0f);
+        currentX = Mathf.Clamp(currentX, -50.0f, 80.0f);
+        Debug.Log("Camera X Rotation: " + currentX);
         Quaternion rotation = Quaternion.Euler(currentX, currentY, 0);
         cameraTransform.rotation = rotation;
     }
