@@ -19,7 +19,8 @@ public class Deer_AI : MonoBehaviour
     public Transform player;
     public Transform VisionConePlayer;
     float checkCounter = 0.0f;
-    bool alreadylooking = false;
+    [HideInInspector] public bool alreadylooking = false;
+    public float DeerMaxVision = 10f;
 
     SphereCollider c;
 
@@ -30,8 +31,8 @@ public class Deer_AI : MonoBehaviour
     //public AudioClip[] DeerSounds;
     //AudioSource DeerSound;
 
-    bool switchActions = false;
-    float actionTimer = 0;
+    [HideInInspector] public bool switchActions = false;
+    [HideInInspector] public float actionTimer = 0;
     float AlertTimer = 0;
 
     float howfardeerhastorun = 20f;
@@ -70,12 +71,14 @@ public class Deer_AI : MonoBehaviour
 
         currentState = AIStates.Idle;
         actionTimer = Random.Range(0.1f, 2.0f);
-        //SwitchAnimationState(currentState);
+        SwitchAnimationState(currentState);
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.DrawLine(transform.position, agent.destination);
+
         // Check for Closest Stag every 20 sec
         if (checkCounter <= 0.0f)
         {
@@ -108,11 +111,13 @@ public class Deer_AI : MonoBehaviour
             {
                 agent.SetDestination(RandomNavSphere(transform.position, Random.Range(1, 2.4f)));
                 currentState = AIStates.Running;
-                //SwitchAnimationState(currentState);
+                SwitchAnimationState(currentState);
             }
             else
             {
-                actionTimer = Random.Range(7, 12);
+                actionTimer = Random.Range(4, 12);
+                Debug.Log(actionTimer);
+                
                 PlayerChecked = false;
                 currentState = AIStates.Standing;
                 SwitchAnimationState(currentState);
@@ -149,41 +154,55 @@ public class Deer_AI : MonoBehaviour
                 //Debug.Log("Here");
                 do
                 {
-                    agent.destination = RandomNavSphere(transform.position, Random.Range(5, 120));
-                    agent.CalculatePath(agent.destination, navMeshPath);
-                    if (navMeshPath.status != NavMeshPathStatus.PathComplete)
-                    {
-                        PathClear = false;
-                        //Debug.Log("Can't go there");
-                    }
-                    else
-                    {
-                        //Debug.Log("Path Clear");
-                        PathClear = true;
+                    //if (!animator || animator.GetCurrentAnimatorStateInfo(0).normalizedTime - Mathf.Floor(animator.GetCurrentAnimatorStateInfo(0).normalizedTime) > 0.99f)
+                    //{
+                        agent.destination = RandomNavSphere(transform.position, Random.Range(5, 120));
+                        agent.CalculatePath(agent.destination, navMeshPath);
 
-                    }
+                        if (navMeshPath.status != NavMeshPathStatus.PathComplete)
+                        {
+                            PathClear = false;
+                            //Debug.Log("Can't go there");
+                        }
+                        else
+                        {
+                            //Debug.Log("Path Clear");
+                            PathClear = true;
 
-                    //SwitchAnimationState(currentState);
-                    /*}*/
+                        }
+                    //}
+                    //else
+                    //{
+                    //    PathClear = false;
+                    //}
+
                 } while (!PathClear);
                 currentState = AIStates.Roaming;
-
+                SwitchAnimationState(currentState);
+                /*}*/
             }
         }
         else if (currentState == AIStates.Alert)
         {
 
-            //DeerSound.clip = DeerSounds[0];
+            if (switchActions)
+            {
+                currentState = AIStates.Idle;
+                DeerMaxVision = 10f;
+                alreadylooking = false;
 
-            AlertLookAround(true);
-            switchActions = false;
-            StartCoroutine(Countdown(4));
-            currentState = AIStates.Idle;
-            AlertLookAround(false);
+            }else if(player && alreadylooking)
+            {
+                float near = (transform.position - player.position).sqrMagnitude;
 
+                if(near < 15)
+                {
+                    currentState = AIStates.Running;
+                    DeerMaxVision = 10f;
+                    alreadylooking = false;
+                }
 
-            switchActions = true;
-
+            }
         }
         else if (currentState == AIStates.Running)
         {
@@ -261,13 +280,13 @@ public class Deer_AI : MonoBehaviour
                 {
                     actionTimer = Random.Range(1.4f, 3.4f);
                     currentState = AIStates.Standing;
-                    //SwitchAnimationState(AIStates.Idle);
+                    SwitchAnimationState(AIStates.Idle);
                 }
             }
 
-            switchActions = false;
+            
         }
-
+        switchActions = false;
     }
 
     public void findClosestPlayer()
@@ -306,14 +325,49 @@ public class Deer_AI : MonoBehaviour
         return false;
     }
 
-    void SwitchAnimationState(AIStates state)
+    public void SwitchAnimationState(AIStates state)
     {
         //Debug.Log(animator);
         if (animator)
         {
+            if(state == AIStates.Standing)
+            {
+                animator.SetBool("isStanding", true);
+                animator.SetBool("isRunning", false);
+                animator.SetBool("isRoaming", false);
+                animator.SetBool("isAlert", false);
+
+            }
+            else if (state == AIStates.Running)
+            {
+                animator.SetBool("isStanding", false);
+                animator.SetBool("isRunning", true);
+                animator.SetBool("isRoaming", false);
+                animator.SetBool("isAlert", false);
+
+            }
+            else if (state == AIStates.Roaming)
+            {
+                animator.SetBool("isStanding", false);
+                animator.SetBool("isRunning", false);
+                animator.SetBool("isRoaming", true);
+                animator.SetBool("isAlert", false);
+
+            }
+            else if (state == AIStates.Alert)
+            {
+                animator.SetBool("isStanding", false);
+                animator.SetBool("isRunning", false);
+                animator.SetBool("isRoaming", false);
+                animator.SetBool("isAlert", true);
+
+            }
+
+
             //animator.SetBool("isStanding", state == AIStates.Standing);
             //animator.SetBool("isRunning", state == AIStates.Running);
             //animator.SetBool("isRoaming", state == AIStates.Roaming);
+            //animator.SetBool("isAlert", state == AIStates.Alert);
         }
 
     }
@@ -334,14 +388,14 @@ public class Deer_AI : MonoBehaviour
 
     }
 
-    void AlertLookAround(bool triggered)
-    {
-        if (!alreadylooking && triggered)
-        {
-            //SwitchAnimationState(AIState.Alert);
-        }
-        alreadylooking = triggered;
-    }
+    //void AlertLookAround(bool triggered)
+    //{
+    //    if (!alreadylooking && triggered)
+    //    {
+    //        SwitchAnimationState(AIStates.Alert);
+    //    }
+    //    alreadylooking = triggered;
+    //}
 
     IEnumerator Fade()
     {

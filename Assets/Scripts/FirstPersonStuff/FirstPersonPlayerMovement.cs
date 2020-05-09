@@ -24,8 +24,9 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     private float cameraAngle;
     private float lerpTimer;
 
+
     // Vectors
-    Vector2 Move;
+    [HideInInspector] public Vector2 Move;
     Vector3 Rotate;
 
     // Rigid Body For Movement
