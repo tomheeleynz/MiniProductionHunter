@@ -52,7 +52,9 @@ public class Deer_AI : MonoBehaviour
 
     Vector3 runTo = Vector3.zero;
 
-
+    private List<Lure> lures = new List<Lure>();
+    private Lure currentLureInRange = null;
+    private bool targetedLure = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,6 +74,11 @@ public class Deer_AI : MonoBehaviour
         currentState = AIStates.Idle;
         actionTimer = Random.Range(0.1f, 2.0f);
         SwitchAnimationState(currentState);
+
+        foreach (Lure item in Object.FindObjectsOfType(typeof(Lure))) //Populate lure array
+        {
+            lures.Add(item);
+        }
     }
 
     // Update is called once per frame
@@ -79,7 +86,8 @@ public class Deer_AI : MonoBehaviour
     {
         Debug.DrawLine(transform.position, agent.destination);
 
-        // Check for Closest Stag every 20 sec
+        currentLureInRange = GetLureInRange();
+        // Check for Closest Stag every 20 sec (and lure)
         if (checkCounter <= 0.0f)
         {
             findClosestPlayer();
@@ -140,6 +148,11 @@ public class Deer_AI : MonoBehaviour
             if (DoneReachingDestination())
             {
                 currentState = AIStates.Idle;
+                if (targetedLure)
+                {
+                    //Deactivate lure
+                    currentLureInRange.DeactivateLure();
+                }
             }
 
         }
@@ -156,11 +169,24 @@ public class Deer_AI : MonoBehaviour
                 {
                     //if (!animator || animator.GetCurrentAnimatorStateInfo(0).normalizedTime - Mathf.Floor(animator.GetCurrentAnimatorStateInfo(0).normalizedTime) > 0.99f)
                     //{
+                    if (currentLureInRange != null && currentLureInRange.spawnedEffect)
+                    {
+                        agent.destination = currentLureInRange.transform.position;
+                        targetedLure = true;
+                    }
+                    else
+                    {
                         agent.destination = RandomNavSphere(transform.position, Random.Range(5, 120));
-                        agent.CalculatePath(agent.destination, navMeshPath);
+                    }
 
-                        if (navMeshPath.status != NavMeshPathStatus.PathComplete)
+                    agent.CalculatePath(agent.destination, navMeshPath);
+
+                    if (navMeshPath.status != NavMeshPathStatus.PathComplete)
                         {
+                        if (currentLureInRange != null)
+                        {
+                            currentLureInRange = null;
+                        }
                             PathClear = false;
                             //Debug.Log("Can't go there");
                         }
@@ -215,6 +241,13 @@ public class Deer_AI : MonoBehaviour
                 {
                     if (DoneReachingDestination() && timeStuck < 0)
                     {
+                        if (targetedLure)
+                        {
+                            //Deactivate lure
+                            currentLureInRange.DeactivateLure();
+                            targetedLure = false;
+                        }
+
                         reverseFlee = false;
                     }
                     else
@@ -278,6 +311,12 @@ public class Deer_AI : MonoBehaviour
                 //Check if we've reached the destination then stop running
                 if (DoneReachingDestination())
                 {
+                    if (targetedLure)
+                    {
+                        //Deactivate lure
+                        currentLureInRange.DeactivateLure();
+                    }
+
                     actionTimer = Random.Range(1.4f, 3.4f);
                     currentState = AIStates.Standing;
                     SwitchAnimationState(AIStates.Idle);
@@ -309,6 +348,18 @@ public class Deer_AI : MonoBehaviour
         checkCounter = 20.0f;
     }
 
+    Lure GetLureInRange()
+    {
+        foreach (Lure item in lures)
+        {
+            if (Vector3.Distance(item.transform.position, transform.position) < item.effectRange)
+            {
+                return (item);
+            }
+        }
+
+        return null;
+    }
     bool DoneReachingDestination()
     {
         if (!agent.pathPending)
