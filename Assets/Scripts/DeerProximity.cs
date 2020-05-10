@@ -9,9 +9,8 @@ public class DeerProximity : MonoBehaviour
     
     void Start()
     {
-       alert = AssetDatabase.LoadAssetAtPath("Assets/SFX/Deer/alertwfade.mp3", typeof(AudioClip)) as AudioClip;
-
-       TimeWait = Random.Range(5.0f, 8.0f);
+        alert = AssetDatabase.LoadAssetAtPath("Assets/SFX/Deer/alertwfade.mp3", typeof(AudioClip)) as AudioClip;
+        TimeWait = Random.Range(5.0f, 8.0f);
     }
 
     float Timer = 0;

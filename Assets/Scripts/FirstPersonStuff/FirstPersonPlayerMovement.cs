@@ -15,13 +15,18 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     [SerializeField] public GameObject arrow;
     [SerializeField] public float m_FieldOfView;
     [SerializeField] public Transform firingPosition;
+    [SerializeField] public GameObject crossHair;
+
     private Camera cam;
     private float currentValue;
     private float lastValue;
-    
+    private float bowForce = 40;
+    private float cameraAngle;
+    private float lerpTimer;
 
     // Vectors
-    Vector2 Move;
+    [HideInInspector]
+    public Vector2 Move;
     Vector3 Rotate;
 
     // Rigid Body For Movement
@@ -64,12 +69,17 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        cameraAngle = fpCamera.GetComponent<FirstPersonCamera>().currentX;
+
         fpCamera.GetComponent<FirstPersonCamera>().currentX -= Rotate.y * 2.0f;
         fpCamera.GetComponent<FirstPersonCamera>().currentY += Rotate.x * 2.0f;
 
         transform.rotation = Quaternion.Euler(0, fpCamera.GetComponent<FirstPersonCamera>().currentY, 0);
-        //Vector3 MoveDirection = (transform.right * moveSpeed * Move.x) + (transform.forward * moveSpeed  * Move.y);
-        //rb.velocity = new Vector3(MoveDirection.x, rb.velocity.y, MoveDirection.z);
+        fpCamera.GetComponent<Camera>().fieldOfView = m_FieldOfView;
+
+        // Set Bow Rotation
+        Vector3 bowAngle = bow.transform.rotation.eulerAngles;
+        bow.transform.rotation = Quaternion.Euler(fpCamera.GetComponent<FirstPersonCamera>().currentX, bowAngle.y, bowAngle.z);
     }
 
     private void FixedUpdate()
@@ -91,16 +101,26 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         //bow.GetComponent<Animator>().enabled = true;
         //GameObject arrowObj = Instantiate(arrow, transform.position + transform.forward * 10, Quaternion.identity) as GameObject;
         //arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
+        AudioSource DrawSound = bow.GetComponent<AudioSource>();
 
+        m_FieldOfView = 50;
 
         float deltaValue = currentValue - lastValue;
 
-        if (deltaValue > 0.1)
-        {
+        crossHair.SetActive(true);
+
+        if (deltaValue > 0.1) {
             bow.GetComponent<Animator>().enabled = true;
+
+            if (!DrawSound.isPlaying)
+            {
+                DrawSound.Play();
+            }
         }
-        else {
+        else 
+        {
             bow.GetComponent<Animator>().enabled = false;
+            DrawSound.Stop();
         }
 
         lastValue = currentValue;
@@ -108,9 +128,11 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
     private void FireBow()
     {
+        m_FieldOfView = 60;
+        crossHair.SetActive(false);
         bow.GetComponent<Animator>().enabled = true;
         GameObject shootingArrow = Instantiate(arrow, firingPosition.position, Quaternion.identity) as GameObject;
-        shootingArrow.GetComponent<Rigidbody>().AddForce(transform.forward * 20);
+        shootingArrow.GetComponent<Rigidbody>().AddForce((transform.forward/Mathf.Cos(Mathf.Deg2Rad * cameraAngle)) * bowForce);
     }
 
 }

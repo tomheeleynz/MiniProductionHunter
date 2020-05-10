@@ -17,22 +17,26 @@ public class PlayerLight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float closestDist = float.PositiveInfinity;
-
-        foreach (var item in GameObject.FindGameObjectsWithTag("Stag"))
+       
+        if (GameObject.FindGameObjectsWithTag("Stag").Length != 0)
         {
-            float distance = Vector3.Distance(transform.position, item.transform.position);
-            if (distance < closestDist)
-            {
-                closestStag = item.transform;
-                closestDist = distance;
-            }
-        }
+            float closestDist = float.PositiveInfinity;
 
-        Vector3 dir= (transform.position - closestStag.position);
-        angle = Vector3.Angle(dir, transform.forward);
-                               //From start intensity to final intensity based on angle
-        float lightIntensity = 0.0f + (3.55f * (angle / 160.0f));
-        TrackLight.intensity = lightIntensity;
+            foreach (var item in GameObject.FindGameObjectsWithTag("Stag"))
+            {
+                float distance = Vector3.Distance(transform.position, item.transform.position);
+                if (distance < closestDist)
+                {
+                    closestStag = item.transform;
+                    closestDist = distance;
+                }
+            }
+
+            Vector3 dir = (transform.position - closestStag.position);
+            angle = Vector3.Angle(dir, transform.forward);
+            //From start intensity to final intensity based on angle
+            float lightIntensity = 0.0f + (3.55f * (angle / 160.0f));
+            TrackLight.intensity = lightIntensity;
+        }
     }
 }
