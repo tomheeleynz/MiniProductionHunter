@@ -21,6 +21,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     private float currentValue;
     private float lastValue;
     private float bowForce = 40;
+    private float bowForceMultiplier;
     private float cameraAngle;
     private float lerpTimer;
 
@@ -98,30 +99,35 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
     private void DrawBow(float currentValue)
     {
-        //bow.GetComponent<Animator>().enabled = true;
-        //GameObject arrowObj = Instantiate(arrow, transform.position + transform.forward * 10, Quaternion.identity) as GameObject;
-        //arrowObj.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
         AudioSource DrawSound = bow.GetComponent<AudioSource>();
 
         m_FieldOfView = 50;
 
-        float deltaValue = currentValue - lastValue;
-
         crossHair.SetActive(true);
 
-        if (deltaValue > 0.1) {
-            bow.GetComponent<Animator>().enabled = true;
+        if (currentValue > lastValue) {
+            bowForceMultiplier = currentValue;
+            //bow.GetComponent<Animator>().enabled = true;
+        }
+        else {
+            //bow.GetComponent<Animator>().enabled = false;
+        }
 
-            if (!DrawSound.isPlaying)
-            {
-                DrawSound.Play();
-            }
-        }
-        else 
-        {
-            bow.GetComponent<Animator>().enabled = false;
-            DrawSound.Stop();
-        }
+        Debug.Log("Force Multiplier Value: " + bowForceMultiplier);
+
+        //if (deltaValue > 0.05) {
+        //    bow.GetComponent<Animator>().enabled = true;
+
+        //    if (!DrawSound.isPlaying)
+        //    {
+        //        DrawSound.Play();
+        //    }
+        //}
+        //else 
+        //{
+        //    bow.GetComponent<Animator>().enabled = false;
+        //    DrawSound.Stop();
+        //}
 
         lastValue = currentValue;
     }
@@ -130,9 +136,13 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     {
         m_FieldOfView = 60;
         crossHair.SetActive(false);
-        bow.GetComponent<Animator>().enabled = true;
+
+        //bow.GetComponent<Animator>().enabled = true;
+
+        Debug.Log("Bow Force Multiplier On Shoot: " + bowForceMultiplier);
         GameObject shootingArrow = Instantiate(arrow, firingPosition.position, Quaternion.identity) as GameObject;
-        shootingArrow.GetComponent<Rigidbody>().AddForce((transform.forward/Mathf.Cos(Mathf.Deg2Rad * cameraAngle)) * bowForce);
+
+        shootingArrow.GetComponent<Rigidbody>().AddForce((transform.forward/Mathf.Cos(Mathf.Deg2Rad * cameraAngle)) * (bowForce * bowForceMultiplier));
     }
 
 }

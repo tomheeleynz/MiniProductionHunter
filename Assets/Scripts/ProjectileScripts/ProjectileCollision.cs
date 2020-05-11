@@ -29,8 +29,8 @@ public class ProjectileCollision : MonoBehaviour
 
     private void Start()
     {
-        shootTrail.SetActive(true);
-        groundTrail.SetActive(false);
+        shootTrail.SetActive(false);
+        groundTrail.SetActive(true);
         bloodTrail.SetActive(false);
         rb = GetComponent<Rigidbody>();
         distToGround = GetComponent<Collider>().bounds.extents.y;

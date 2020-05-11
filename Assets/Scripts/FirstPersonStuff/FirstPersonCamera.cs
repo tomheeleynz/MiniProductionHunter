@@ -22,7 +22,6 @@ public class FirstPersonCamera : MonoBehaviour
     void Update()
     {
         currentX = Mathf.Clamp(currentX, -50.0f, 80.0f);
-        Debug.Log("Camera X Rotation: " + currentX);
         Quaternion rotation = Quaternion.Euler(currentX, currentY, 0);
         cameraTransform.rotation = rotation;
     }
