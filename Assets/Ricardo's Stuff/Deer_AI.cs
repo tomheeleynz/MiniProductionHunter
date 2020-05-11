@@ -97,10 +97,13 @@ public class Deer_AI : MonoBehaviour
             checkCounter -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
+        if (Input.GetKeyDown(KeyCode.Space))
+
+        {
+
             StartCoroutine(Fade());
-
+
+
         }
         //Debug.Log(currentState);
         if (actionTimer > 0)
@@ -448,39 +451,70 @@ public class Deer_AI : MonoBehaviour
     //    alreadylooking = triggered;
     //}
 
-    IEnumerator Fade()
-    {
-        for (float ft = 1f; ft >= 0; ft -= 0.1f)
-        {
-            Color c = GetComponent<Light>().color;
-            c.g = ft;
-            c.b = ft;
-            GetComponent<Light>().color = c;
-
-            if (ft < 0.1f)
-            {
-                StartCoroutine(FadeOut());
-            }
-            yield return new WaitForSeconds(.02f);
-        }
+    IEnumerator Fade()
+
+    {
+
+        for (float ft = 1f; ft >= 0; ft -= 0.1f)
+
+        {
+
+            Color c = GetComponent<Light>().color;
+
+            c.g = ft;
+
+            c.b = ft;
+
+            GetComponent<Light>().color = c;
+
+
+
+            if (ft < 0.1f)
+
+            {
+
+                StartCoroutine(FadeOut());
+
+            }
+
+            yield return new WaitForSeconds(.02f);
+
+        }
+
     }
 
-    IEnumerator FadeOut()
-    {
-        for (float ft = 0f; ft <= 1; ft += 0.1f)
-        {
-            Color c = GetComponent<Light>().color;
-            c.g = ft;
-            c.b = ft;
-            GetComponent<Light>().color = c;
-
-            if (ft > 0.9f)
-            {
-                yield break;
-            }
-            yield return new WaitForSeconds(.02f);
-        }
-
+    IEnumerator FadeOut()
+
+    {
+
+        for (float ft = 0f; ft <= 1; ft += 0.1f)
+
+        {
+
+            Color c = GetComponent<Light>().color;
+
+            c.g = ft;
+
+            c.b = ft;
+
+            GetComponent<Light>().color = c;
+
+
+
+            if (ft > 0.9f)
+
+            {
+
+                yield break;
+
+            }
+
+            yield return new WaitForSeconds(.02f);
+
+        }
+
+
+
     }
     void OnTriggerEnter(Collider other)
     {
@@ -502,8 +536,10 @@ public class Deer_AI : MonoBehaviour
 
             actionTimer = Random.Range(0.24f, 0.8f);
             currentState = AIStates.Idle;
-            SwitchAnimationState(currentState);
-
+            SwitchAnimationState(currentState);
+
+
+
             StartCoroutine(Fade());
             if (deerHp <= 0)
             {
