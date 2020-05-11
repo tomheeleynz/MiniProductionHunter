@@ -52,7 +52,9 @@ public class Deer_AI : MonoBehaviour
 
     Vector3 runTo = Vector3.zero;
 
-
+    private List<Lure> lures = new List<Lure>();
+    private Lure currentLureInRange = null;
+    private bool targetedLure = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,6 +74,11 @@ public class Deer_AI : MonoBehaviour
         currentState = AIStates.Idle;
         actionTimer = Random.Range(0.1f, 2.0f);
         SwitchAnimationState(currentState);
+
+        foreach (Lure item in Object.FindObjectsOfType(typeof(Lure))) //Populate lure array
+        {
+            lures.Add(item);
+        }
     }
 
     // Update is called once per frame
@@ -79,7 +86,8 @@ public class Deer_AI : MonoBehaviour
     {
         Debug.DrawLine(transform.position, agent.destination);
 
-        // Check for Closest Stag every 20 sec
+        currentLureInRange = GetLureInRange();
+        // Check for Closest Stag every 20 sec (and lure)
         if (checkCounter <= 0.0f)
         {
             findClosestPlayer();
@@ -89,10 +97,13 @@ public class Deer_AI : MonoBehaviour
             checkCounter -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
+        if (Input.GetKeyDown(KeyCode.Space))
+
+        {
+
             StartCoroutine(Fade());
-
+
+
         }
         //Debug.Log(currentState);
         if (actionTimer > 0)
@@ -140,6 +151,11 @@ public class Deer_AI : MonoBehaviour
             if (DoneReachingDestination())
             {
                 currentState = AIStates.Idle;
+                if (targetedLure)
+                {
+                    //Deactivate lure
+                    currentLureInRange.DeactivateLure();
+                }
             }
 
         }
@@ -156,11 +172,24 @@ public class Deer_AI : MonoBehaviour
                 {
                     //if (!animator || animator.GetCurrentAnimatorStateInfo(0).normalizedTime - Mathf.Floor(animator.GetCurrentAnimatorStateInfo(0).normalizedTime) > 0.99f)
                     //{
+                    if (currentLureInRange != null && currentLureInRange.spawnedEffect)
+                    {
+                        agent.destination = currentLureInRange.transform.position;
+                        targetedLure = true;
+                    }
+                    else
+                    {
                         agent.destination = RandomNavSphere(transform.position, Random.Range(5, 120));
-                        agent.CalculatePath(agent.destination, navMeshPath);
+                    }
 
-                        if (navMeshPath.status != NavMeshPathStatus.PathComplete)
+                    agent.CalculatePath(agent.destination, navMeshPath);
+
+                    if (navMeshPath.status != NavMeshPathStatus.PathComplete)
                         {
+                        if (currentLureInRange != null)
+                        {
+                            currentLureInRange = null;
+                        }
                             PathClear = false;
                             //Debug.Log("Can't go there");
                         }
@@ -215,6 +244,13 @@ public class Deer_AI : MonoBehaviour
                 {
                     if (DoneReachingDestination() && timeStuck < 0)
                     {
+                        if (targetedLure)
+                        {
+                            //Deactivate lure
+                            currentLureInRange.DeactivateLure();
+                            targetedLure = false;
+                        }
+
                         reverseFlee = false;
                     }
                     else
@@ -278,6 +314,12 @@ public class Deer_AI : MonoBehaviour
                 //Check if we've reached the destination then stop running
                 if (DoneReachingDestination())
                 {
+                    if (targetedLure)
+                    {
+                        //Deactivate lure
+                        currentLureInRange.DeactivateLure();
+                    }
+
                     actionTimer = Random.Range(1.4f, 3.4f);
                     currentState = AIStates.Standing;
                     SwitchAnimationState(AIStates.Idle);
@@ -309,6 +351,18 @@ public class Deer_AI : MonoBehaviour
         checkCounter = 20.0f;
     }
 
+    Lure GetLureInRange()
+    {
+        foreach (Lure item in lures)
+        {
+            if (Vector3.Distance(item.transform.position, transform.position) < item.effectRange)
+            {
+                return (item);
+            }
+        }
+
+        return null;
+    }
     bool DoneReachingDestination()
     {
         if (!agent.pathPending)
@@ -397,39 +451,70 @@ public class Deer_AI : MonoBehaviour
     //    alreadylooking = triggered;
     //}
 
-    IEnumerator Fade()
-    {
-        for (float ft = 1f; ft >= 0; ft -= 0.1f)
-        {
-            Color c = GetComponent<Light>().color;
-            c.g = ft;
-            c.b = ft;
-            GetComponent<Light>().color = c;
-
-            if (ft < 0.1f)
-            {
-                StartCoroutine(FadeOut());
-            }
-            yield return new WaitForSeconds(.02f);
-        }
+    IEnumerator Fade()
+
+    {
+
+        for (float ft = 1f; ft >= 0; ft -= 0.1f)
+
+        {
+
+            Color c = GetComponent<Light>().color;
+
+            c.g = ft;
+
+            c.b = ft;
+
+            GetComponent<Light>().color = c;
+
+
+
+            if (ft < 0.1f)
+
+            {
+
+                StartCoroutine(FadeOut());
+
+            }
+
+            yield return new WaitForSeconds(.02f);
+
+        }
+
     }
 
-    IEnumerator FadeOut()
-    {
-        for (float ft = 0f; ft <= 1; ft += 0.1f)
-        {
-            Color c = GetComponent<Light>().color;
-            c.g = ft;
-            c.b = ft;
-            GetComponent<Light>().color = c;
-
-            if (ft > 0.9f)
-            {
-                yield break;
-            }
-            yield return new WaitForSeconds(.02f);
-        }
-
+    IEnumerator FadeOut()
+
+    {
+
+        for (float ft = 0f; ft <= 1; ft += 0.1f)
+
+        {
+
+            Color c = GetComponent<Light>().color;
+
+            c.g = ft;
+
+            c.b = ft;
+
+            GetComponent<Light>().color = c;
+
+
+
+            if (ft > 0.9f)
+
+            {
+
+                yield break;
+
+            }
+
+            yield return new WaitForSeconds(.02f);
+
+        }
+
+
+
     }
     void OnTriggerEnter(Collider other)
     {
@@ -451,8 +536,10 @@ public class Deer_AI : MonoBehaviour
 
             actionTimer = Random.Range(0.24f, 0.8f);
             currentState = AIStates.Idle;
-            SwitchAnimationState(currentState);
-
+            SwitchAnimationState(currentState);
+
+
+
             StartCoroutine(Fade());
             if (deerHp <= 0)
             {
