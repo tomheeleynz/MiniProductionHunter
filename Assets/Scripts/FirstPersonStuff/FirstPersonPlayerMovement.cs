@@ -37,6 +37,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.visible = false;
         _controls = new PlayerControls();
         
         // Movement
@@ -49,6 +50,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
         _controls.Gameplay.Fire.performed += ctx => DrawBow(ctx.ReadValue<float>());
         _controls.Gameplay.Fire.canceled += ctx => FireBow();
+
+        _controls.Gameplay.Interactable.started += ctx => InteractWithStuff();
     }
 
     private void OnEnable()
@@ -120,7 +123,7 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
         //    if (!DrawSound.isPlaying)
         //    {
-        //        DrawSound.Play();
+        //        DrawSound.Play();+
         //    }
         //}
         //else 
@@ -143,6 +146,11 @@ public class FirstPersonPlayerMovement : MonoBehaviour
         GameObject shootingArrow = Instantiate(arrow, firingPosition.position, Quaternion.identity) as GameObject;
 
         shootingArrow.GetComponent<Rigidbody>().AddForce((transform.forward/Mathf.Cos(Mathf.Deg2Rad * cameraAngle)) * (bowForce * bowForceMultiplier));
+    }
+
+    private void InteractWithStuff()
+    {
+        Debug.Log("Interacting");
     }
 
 }

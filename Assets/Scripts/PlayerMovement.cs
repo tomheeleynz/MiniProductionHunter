@@ -80,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
         _controls.Gameplay.DrawBow.canceled += ctx => DrawBowFunc(ctx, "cancelled");
 
         // Jump Button
-        _controls.Gameplay.Jump.performed += ctx => JumpFunc(ctx);
+        //_controls.Gameplay.Jump.performed += ctx => JumpFunc(ctx);
 
         // Getting RigidBody for Movement
         rb = GetComponent<Rigidbody>();

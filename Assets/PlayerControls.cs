@@ -59,14 +59,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""f075d077-16eb-42a8-b25c-4e79001e139f"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Crouch"",
                     ""type"": ""Button"",
                     ""id"": ""45bfa4c7-8a6a-4643-aa72-671802eebd4c"",
@@ -78,6 +70,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""a96f2b4e-be32-4c51-8747-d81bb0a75673"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Interactable"",
+                    ""type"": ""Button"",
+                    ""id"": ""ebd7206e-ef50-4e04-9c7c-9b720e258d8f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
@@ -141,17 +141,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1584fda5-87f0-4d93-83c8-d143e07cb2bb"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""fb13b0bf-5146-4b45-a32b-d8d4e5ccbabf"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
@@ -169,6 +158,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6e813e1-ccdc-4de2-896f-3460b00b88cf"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interactable"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -249,9 +249,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_DrawBow = m_Gameplay.FindAction("DrawBow", throwIfNotFound: true);
         m_Gameplay_Fire = m_Gameplay.FindAction("Fire", throwIfNotFound: true);
         m_Gameplay_LStickDown = m_Gameplay.FindAction("LStick Down", throwIfNotFound: true);
-        m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Crouch = m_Gameplay.FindAction("Crouch", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        m_Gameplay_Interactable = m_Gameplay.FindAction("Interactable", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_MoveDownMenu = m_UI.FindAction("MoveDownMenu", throwIfNotFound: true);
@@ -311,9 +311,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_DrawBow;
     private readonly InputAction m_Gameplay_Fire;
     private readonly InputAction m_Gameplay_LStickDown;
-    private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Crouch;
     private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_Interactable;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -323,9 +323,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @DrawBow => m_Wrapper.m_Gameplay_DrawBow;
         public InputAction @Fire => m_Wrapper.m_Gameplay_Fire;
         public InputAction @LStickDown => m_Wrapper.m_Gameplay_LStickDown;
-        public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Crouch => m_Wrapper.m_Gameplay_Crouch;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @Interactable => m_Wrapper.m_Gameplay_Interactable;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -350,15 +350,15 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @LStickDown.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLStickDown;
                 @LStickDown.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLStickDown;
                 @LStickDown.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLStickDown;
-                @Jump.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
-                @Jump.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
-                @Jump.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
                 @Crouch.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCrouch;
                 @Crouch.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCrouch;
                 @Crouch.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCrouch;
                 @Pause.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @Interactable.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteractable;
+                @Interactable.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteractable;
+                @Interactable.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteractable;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -378,15 +378,15 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @LStickDown.started += instance.OnLStickDown;
                 @LStickDown.performed += instance.OnLStickDown;
                 @LStickDown.canceled += instance.OnLStickDown;
-                @Jump.started += instance.OnJump;
-                @Jump.performed += instance.OnJump;
-                @Jump.canceled += instance.OnJump;
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @Interactable.started += instance.OnInteractable;
+                @Interactable.performed += instance.OnInteractable;
+                @Interactable.canceled += instance.OnInteractable;
             }
         }
     }
@@ -447,9 +447,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnDrawBow(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnLStickDown(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnInteractable(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
