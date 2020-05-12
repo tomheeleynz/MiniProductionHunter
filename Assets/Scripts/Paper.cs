@@ -12,6 +12,7 @@ public class Paper : MonoBehaviour
 
     public bool inRange = false;
     public GameObject playerObj;
+
     // Start is called before the first frame update
     void Start()
     {

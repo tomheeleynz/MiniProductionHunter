@@ -174,7 +174,7 @@ public class Deer_AI : MonoBehaviour
                     //{
                     if (currentLureInRange != null && currentLureInRange.spawnedEffect)
                     {
-                        agent.destination = currentLureInRange.transform.position;
+                        agent.destination = RandomNavSphere(currentLureInRange.transform.position, Random.Range(2, 5));
                         targetedLure = true;
                     }
                     else

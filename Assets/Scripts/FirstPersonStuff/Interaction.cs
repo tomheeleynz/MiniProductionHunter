@@ -9,6 +9,7 @@ public class Interaction : MonoBehaviour
     public Camera AttachedCam;
 
     public bool bDebug = false;
+    public GameObject pressA;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +28,7 @@ public class Interaction : MonoBehaviour
             if (hit.transform.tag == "Interactable")
             {
                 hoverOver = hit.transform;
+                pressA.SetActive(true);
                 hoverOver.GetComponent<Interactable>().HighLight(true);
                 hoverOver.GetComponent<Interactable>().hoverOver = true;
             }
@@ -34,6 +36,7 @@ public class Interaction : MonoBehaviour
             {
                 if (hoverOver != null)
                 {
+                    pressA.SetActive(false);
                     hoverOver.GetComponent<Interactable>().HighLight(false);
                     hoverOver = null;
                     hoverOver.GetComponent<Interactable>().hoverOver = false;
@@ -45,6 +48,7 @@ public class Interaction : MonoBehaviour
         {
             if (hoverOver != null)
             {
+                pressA.SetActive(false);
                 hoverOver.GetComponent<Interactable>().hoverOver = false;
                 hoverOver.GetComponent<Interactable>().HighLight(false);
                 hoverOver = null;
