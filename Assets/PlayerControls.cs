@@ -201,6 +201,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Quit"",
+                    ""type"": ""Button"",
+                    ""id"": ""81b8d448-5ff4-484b-8928-a211b2b36ad0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -236,6 +244,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff5da198-a63f-4764-975d-c715d3f07356"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -257,6 +276,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_UI_MoveDownMenu = m_UI.FindAction("MoveDownMenu", throwIfNotFound: true);
         m_UI_MoveUpMenu = m_UI.FindAction("MoveUpMenu", throwIfNotFound: true);
         m_UI_Select = m_UI.FindAction("Select", throwIfNotFound: true);
+        m_UI_Quit = m_UI.FindAction("Quit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -398,6 +418,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_UI_MoveDownMenu;
     private readonly InputAction m_UI_MoveUpMenu;
     private readonly InputAction m_UI_Select;
+    private readonly InputAction m_UI_Quit;
     public struct UIActions
     {
         private @PlayerControls m_Wrapper;
@@ -405,6 +426,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @MoveDownMenu => m_Wrapper.m_UI_MoveDownMenu;
         public InputAction @MoveUpMenu => m_Wrapper.m_UI_MoveUpMenu;
         public InputAction @Select => m_Wrapper.m_UI_Select;
+        public InputAction @Quit => m_Wrapper.m_UI_Quit;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -423,6 +445,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Select.started -= m_Wrapper.m_UIActionsCallbackInterface.OnSelect;
                 @Select.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnSelect;
                 @Select.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnSelect;
+                @Quit.started -= m_Wrapper.m_UIActionsCallbackInterface.OnQuit;
+                @Quit.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnQuit;
+                @Quit.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnQuit;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -436,6 +461,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Select.started += instance.OnSelect;
                 @Select.performed += instance.OnSelect;
                 @Select.canceled += instance.OnSelect;
+                @Quit.started += instance.OnQuit;
+                @Quit.performed += instance.OnQuit;
+                @Quit.canceled += instance.OnQuit;
             }
         }
     }
@@ -456,5 +484,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnMoveDownMenu(InputAction.CallbackContext context);
         void OnMoveUpMenu(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
+        void OnQuit(InputAction.CallbackContext context);
     }
 }

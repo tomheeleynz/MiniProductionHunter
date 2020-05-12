@@ -11,6 +11,7 @@ public class EndMenu : MonoBehaviour
     {
         _controls = new PlayerControls();
         _controls.UI.Select.started += ctx => RestartGame();
+        _controls.UI.Quit.started += ctx => EndGame();
         Cursor.visible = false;
     }
 
