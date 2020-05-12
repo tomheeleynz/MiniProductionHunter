@@ -22,7 +22,7 @@ public class EndGameTrigger : MonoBehaviour
 
     private MenuFuncs SceneLoader;
 
-    public GameObject TimeDial;
+    public GameObject TimeSlider;
     // Start is called before the first frame update
     void Start()
     {
@@ -60,8 +60,12 @@ public class EndGameTrigger : MonoBehaviour
         RenderSettings.sun.intensity = 0.2f + (0.2f * ElapsedTimeMag);
 
 
-        TimeDial.transform.rotation = Quaternion.Euler(0, 0, 85.0f - (75.0f * ElapsedTimeMag));
+        //TimeSlider.transform.rotation = Quaternion.Euler(0, 0, 85.0f - (75.0f * ElapsedTimeMag));
+        Vector3 newPos = TimeSlider.transform.localPosition;
+        newPos.x = -97.0f + ((97.0f * 2) * ElapsedTimeMag);
+        TimeSlider.transform.localPosition = newPos;
     }
+
 
     void OnGUI()
     {

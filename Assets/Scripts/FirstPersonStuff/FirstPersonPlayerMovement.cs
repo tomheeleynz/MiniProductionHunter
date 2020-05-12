@@ -151,6 +151,8 @@ public class FirstPersonPlayerMovement : MonoBehaviour
     private void InteractWithStuff()
     {
         Debug.Log("Interacting");
+
+        GetComponent<Interaction>().OnInteract();
     }
 
 }
