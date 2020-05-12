@@ -110,9 +110,14 @@ public class FirstPersonPlayerMovement : MonoBehaviour
 
         if (currentValue > lastValue) {
             bowForceMultiplier = currentValue;
-            //bow.GetComponent<Animator>().enabled = true;
+            if (!DrawSound.isPlaying)
+            {
+                DrawSound.Play();
+            }
+        //bow.GetComponent<Animator>().enabled = true;
         }
         else {
+            DrawSound.Stop();
             //bow.GetComponent<Animator>().enabled = false;
         }
 
