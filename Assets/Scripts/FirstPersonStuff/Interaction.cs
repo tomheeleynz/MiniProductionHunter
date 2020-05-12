@@ -28,6 +28,7 @@ public class Interaction : MonoBehaviour
             {
                 hoverOver = hit.transform;
                 hoverOver.GetComponent<Interactable>().HighLight(true);
+                hoverOver.GetComponent<Interactable>().hoverOver = true;
             }
             else
             {
@@ -35,6 +36,7 @@ public class Interaction : MonoBehaviour
                 {
                     hoverOver.GetComponent<Interactable>().HighLight(false);
                     hoverOver = null;
+                    hoverOver.GetComponent<Interactable>().hoverOver = false;
                 }
 
             }
@@ -43,6 +45,7 @@ public class Interaction : MonoBehaviour
         {
             if (hoverOver != null)
             {
+                hoverOver.GetComponent<Interactable>().hoverOver = false;
                 hoverOver.GetComponent<Interactable>().HighLight(false);
                 hoverOver = null;
             }
@@ -65,9 +68,17 @@ public class Interaction : MonoBehaviour
 
     public void OnInteract()
     {
+
+
         if (hoverOver != null)
         {
             hoverOver.GetComponent<Interactable>().bActive = true;
+        }
+
+
+        foreach (Paper item in Object.FindObjectsOfType(typeof(Paper))) //Populate lure array
+        {
+            item.buttonPress();
         }
     }
 }
