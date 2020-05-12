@@ -1,19 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-public class StartMenu : MonoBehaviour
+public class EndMenu : MonoBehaviour
 {
     PlayerControls _controls;
-    private int currentBtnSelected;
 
     private void Awake()
     {
         _controls = new PlayerControls();
-        _controls.UI.Select.performed += ctx => SelectButton();
+        _controls.UI.Select.started += ctx => RestartGame();
         Cursor.visible = false;
     }
 
@@ -27,14 +24,9 @@ public class StartMenu : MonoBehaviour
         _controls.UI.Disable();
     }
 
-    private void SelectButton()
+    private void RestartGame()
     {
-        StartGame();
-    }
-
-    private void StartGame()
-    {
-        SceneManager.LoadScene("MainTerrainScene");
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void EndGame()
