@@ -48,10 +48,10 @@ public class Interaction : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && hoverOver != null)
-        {
-            hoverOver.GetComponent<Interactable>().bActive = true;
-        }
+        //if (Input.GetKeyDown(KeyCode.Space) && hoverOver != null)
+        //{
+        //    hoverOver.GetComponent<Interactable>().bActive = true;
+        //}
     }
 
     private void OnGUI()
@@ -60,6 +60,14 @@ public class Interaction : MonoBehaviour
         {
             Vector3 screenPos = AttachedCam.WorldToScreenPoint(hoverOver.position);
             GUI.Label(new Rect(screenPos.x, screenPos.y, 100, 70), hoverOver.name + (Vector3.Distance(transform.position, hoverOver.position).ToString()));
+        }
+    }
+
+    public void OnInteract()
+    {
+        if (hoverOver != null)
+        {
+            hoverOver.GetComponent<Interactable>().bActive = true;
         }
     }
 }
