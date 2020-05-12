@@ -9563,6 +9563,7 @@ MonoBehaviour:
   shootTrail: {fileID: 7256308398364747681}
   groundTrail: {fileID: 231996643737175424}
   bloodTrail: {fileID: 3218844680581080314}
+  deerSkin: {fileID: 56529196298038210, guid: 047d15c12e56731439c872b37bb44149, type: 3}
   timeLeft: 3
 --- !u!54 &5429525182359217881
 Rigidbody:

@@ -10,6 +10,7 @@ public class ProjectileCollision : MonoBehaviour
     public GameObject shootTrail;
     public GameObject groundTrail;
     public GameObject bloodTrail;
+    [SerializeField] public GameObject deerSkin;
     [SerializeField] public float timeLeft;
 
     private void Stop()
@@ -57,6 +58,10 @@ public class ProjectileCollision : MonoBehaviour
         if (!stopped)
         {
             if (other.gameObject.tag == "Stag") {
+
+                Transform deerTransform = other.gameObject.transform;
+                GameObject Skin = Instantiate(deerSkin, deerTransform.position, Quaternion.identity) as GameObject;
+                Skin.transform.localScale = new Vector3(20.0f, 20.0f, 20.0f);
                 Destroy(other.gameObject);
             }
             else if (other.gameObject.tag == "Ground") {
